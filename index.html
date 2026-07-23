@@ -436,7 +436,10 @@ function bootRoster(DATA){
         return;
       }
       if(info.source === 'network' && info.changed){
-        pill('Roster updated.', {label:'Reload', fn:function(){ location.reload(); }});
+        // Fresh open, cache was stale: swap in the current data directly.
+        // No open-tab polling exists yet, so this only ever fires once,
+        // right after boot, before anyone has had a chance to interact.
+        bootRoster(data);
       }
     },
     onError: function(err, info){
