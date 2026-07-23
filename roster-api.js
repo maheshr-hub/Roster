@@ -20,7 +20,7 @@
 
 var RosterAPI = (function () {
 
-  var API_URL = 'PASTE_YOUR_EXEC_URL_HERE';   // ends in /exec
+  var API_URL = 'https://script.googleusercontent.com/macros/echo?user_content_key=AUkAhnRd7kLSNGCSXUn2hk7MH9toyYMDCLJEtZmg441_ZNWMo63LwJdbyyGwI29qD1RQL9OK0KKV5KFNTNc3SsG4lpWGQFtWEveBHV7-3ydzWk4mwKgBmLlrB1T_qHNvx4oM2VSWGA6ek_AgNmOnnXlAsbXSj5i9ZnaVvz1x-vejQ_-OEaqkVlSaPVM9Vkuje-q2XioGWWpW9MpFnfIENfokJYxA9p77Gk0PqVMGpFsuxUW8VlAsERrdlFDu2G8Wvme9_c_wKUWsviXY1SW3-VSrt6P5rdaEZ52ke4IJZS8RykRfQovZrU_EFrAxR16Pna57t9VdW19kOeQ-jGc6Jz4&lib=M9hL1uGyuSa2nV10oMYS_fAfEmhg7y3HA';   // ends in /exec
 
   var LS_DATA  = 'roster.payload.v1';
   var LS_META  = 'roster.meta.v1';
