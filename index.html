@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Mahesh's Roster</title>
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#17212B">
+<link rel="icon" href="icon-192.png">
+<link rel="apple-touch-icon" href="icon-192.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Roster">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Serif:wght@500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#17212B; --ink-2:#4A5A6A; --ink-3:#8494A2;
+  --paper:#FAF8F4; --surface:#FFFFFF; --rule:#E2DFD8; --rule-2:#CFCBC2;
+  --rbwh:#C85A1B; --cab:#1C7A6A; --wes:#7A4E96;
+  --leave:#C0821F; --obs:#A8323F; --school:#6B8B3D;
+  --r:3px;
+  --serif:"IBM Plex Serif",Georgia,serif;
+  --sans:"IBM Plex Sans",system-ui,sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,monospace;
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{background:var(--paper);color:var(--ink);font-family:var(--sans);font-size:15px;line-height:1.45;
+  -webkit-font-smoothing:antialiased;padding-bottom:3rem}
+.wrap{max-width:1060px;margin:0 auto;padding:0 20px}
+a{color:inherit}
+button{font:inherit;color:inherit;background:none;border:none;cursor:pointer}
+:focus-visible{outline:2px solid var(--rbwh);outline-offset:2px}
+
+/* ---- masthead ---- */
+header{border-bottom:1px solid var(--rule);background:var(--surface);position:sticky;top:0;z-index:20}
+.mast{display:flex;align-items:center;gap:18px;padding:14px 0;flex-wrap:wrap}
+.wordmark{font-family:var(--serif);font-weight:600;font-size:19px;letter-spacing:-.01em;white-space:nowrap}
+.wordmark span{color:var(--ink-3);font-weight:500}
+.spacer{flex:1}
+.tabs{display:flex;gap:2px;background:var(--paper);border:1px solid var(--rule);border-radius:var(--r);padding:2px}
+.tabs button{padding:5px 13px;border-radius:2px;font-size:13px;color:var(--ink-2);letter-spacing:.01em}
+.tabs button[aria-selected=true]{background:var(--ink);color:#fff}
+.toggle{display:flex;align-items:center;gap:7px;font-size:12px;color:var(--ink-2);
+  font-family:var(--mono);text-transform:uppercase;letter-spacing:.06em}
+.switch{width:34px;height:19px;border-radius:10px;background:var(--rule-2);position:relative;transition:background .18s}
+.switch::after{content:"";position:absolute;top:2px;left:2px;width:15px;height:15px;border-radius:50%;
+  background:#fff;transition:transform .18s}
+.switch[data-on=true]{background:var(--ink)}
+.switch[data-on=true]::after{transform:translateX(15px)}
+
+/* ---- today ---- */
+.todaycard{display:flex;gap:0;align-items:stretch;border:1px solid var(--rule);border-radius:var(--r);
+  background:var(--surface);margin:20px 0 24px;overflow:hidden}
+.todaycard .spine{width:6px;flex:none}
+.todaycard .body{padding:14px 16px;flex:1;display:flex;gap:26px;align-items:center;flex-wrap:wrap}
+.todaycard .lbl{font-family:var(--mono);font-size:11px;text-transform:uppercase;letter-spacing:.09em;
+  color:var(--ink-3);display:block;margin-bottom:2px}
+.todaycard .big{font-family:var(--serif);font-size:22px;font-weight:600;letter-spacing:-.01em}
+.todaycard .sub{font-size:14px;color:var(--ink-2)}
+
+/* ---- month ---- */
+.navrow{display:flex;align-items:center;gap:12px;margin-bottom:12px}
+.navrow h2{font-family:var(--serif);font-size:20px;font-weight:600;margin:0;letter-spacing:-.01em}
+.navrow button.arrow{width:28px;height:28px;border:1px solid var(--rule);border-radius:var(--r);
+  display:grid;place-items:center;color:var(--ink-2);background:var(--surface)}
+.navrow button.arrow:hover{border-color:var(--rule-2);color:var(--ink)}
+.grid{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:3px}
+.dow{font-family:var(--mono);font-size:10px;text-transform:uppercase;letter-spacing:.1em;
+  color:var(--ink-3);text-align:center;padding:0 0 5px}
+.cell{background:var(--surface);border:1px solid var(--rule);border-radius:var(--r);min-height:108px;
+  padding:6px 7px 7px 9px;position:relative;display:flex;flex-direction:column;gap:3px;overflow:hidden}
+.cell.out{opacity:.35}
+.cell.is-today{border-color:var(--ink);box-shadow:inset 0 0 0 1px var(--ink)}
+.cell .spine{position:absolute;left:0;top:0;bottom:0;width:4px}
+.cell.prov .spine{opacity:.45;background-image:repeating-linear-gradient(
+  135deg,transparent 0 3px,rgba(255,255,255,.85) 3px 6px)}
+.dnum{font-family:var(--mono);font-size:15px;color:var(--ink-2);display:flex;justify-content:space-between;
+  align-items:center;gap:4px}
+.cell.is-today .dnum{color:var(--ink);font-weight:500}
+.duty{font-size:15px;font-weight:600;letter-spacing:-.005em;line-height:1.2}
+.site{font-size:14px;color:var(--ink-2);line-height:1.2}
+.oc{font-family:var(--mono);font-size:12px;letter-spacing:.03em;color:#fff;background:var(--ink);
+  border-radius:2px;padding:1px 4px;display:inline-block;margin-right:2px}
+.tag{font-size:14px;border-radius:2px;padding:1px 5px;display:inline-block;line-height:1.35}
+.tag.leave{background:#F6E9CE;color:#6B4708}
+.tag.obs{background:#F5DCDE;color:#6E1620}
+.tag.ev{background:#E6EBF0;color:#1F3242}
+.cell.school{background:#F4F6EC}
+.cell.school .dnum::after{content:"";width:5px;height:5px;border-radius:50%;background:var(--school);flex:none}
+
+/* ---- legend ---- */
+.legend{display:flex;flex-wrap:wrap;gap:6px 18px;margin-top:14px;font-size:12px;color:var(--ink-2)}
+.legend i{width:9px;height:9px;border-radius:2px;display:inline-block;margin-right:6px;vertical-align:-1px}
+.legend .hatch{background-image:repeating-linear-gradient(135deg,var(--ink-3) 0 2px,transparent 2px 4px);
+  background-color:transparent;border:1px solid var(--rule-2)}
+
+/* ---- year strip (signature) ---- */
+.yearwrap{margin-top:6px;overflow-x:auto;padding-bottom:8px}
+.ystrip{display:grid;grid-auto-flow:column;grid-template-rows:repeat(7,12px);gap:2px;width:max-content}
+.ycell{width:12px;height:12px;border-radius:1px;position:relative}
+.ycell.prov{opacity:.38}
+.ycell .lv{position:absolute;inset:3px;border-radius:1px;background:var(--leave)}
+.ycell .ob{position:absolute;left:0;right:0;bottom:0;height:3px;background:var(--obs)}
+.ycell .sc{position:absolute;left:0;right:0;top:0;height:2px;background:var(--school)}
+.ylabels{display:grid;grid-template-rows:repeat(7,12px);gap:2px;margin-right:6px;font-family:var(--mono);
+  font-size:9px;color:var(--ink-3);align-items:center}
+.ymonths{display:flex;gap:0;font-family:var(--mono);font-size:10px;color:var(--ink-3);
+  margin-bottom:4px;width:max-content;letter-spacing:.06em}
+.yrow{display:flex;align-items:flex-start}
+
+/* ---- agenda ---- */
+.agenda{border-top:1px solid var(--rule)}
+.arow{display:grid;grid-template-columns:104px 1fr;gap:16px;padding:11px 0;border-bottom:1px solid var(--rule)}
+.arow .when{font-family:var(--mono);font-size:12px;color:var(--ink-2);padding-top:2px}
+.arow .what{display:flex;flex-direction:column;gap:3px}
+.arow .ttl{font-size:15px}
+.arow .meta{font-size:12.5px;color:var(--ink-2)}
+.pill{font-family:var(--mono);font-size:10px;text-transform:uppercase;letter-spacing:.07em;
+  border:1px solid var(--rule-2);border-radius:2px;padding:1px 5px;color:var(--ink-2)}
+.contested{border-color:var(--obs);color:var(--obs)}
+
+.note{font-size:12.5px;color:var(--ink-3);margin-top:18px;max-width:62ch}
+.hidden{display:none}
+@media (max-width:640px){
+  .wrap{padding:0 12px}
+  .cell{min-height:86px;padding:5px 5px 6px 8px}
+  .duty{font-size:13px}.site{font-size:12px}.tag{font-size:12px}
+  .todaycard .body{gap:16px}
+  .mast{gap:10px}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap mast">
+    <div class="wordmark">Mahesh's <span>Roster</span></div>
+    <div class="spacer"></div>
+    <div class="tabs" role="tablist">
+      <button role="tab" data-view="month" aria-selected="true">Month</button>
+      <button role="tab" data-view="year" aria-selected="false">Year</button>
+      <button role="tab" data-view="agenda" aria-selected="false">Agenda</button>
+    </div>
+    <button class="toggle" id="modeBtn" aria-pressed="false">
+      <span class="switch" data-on="false"></span> Duty codes
+    </button>
+  </div>
+</header>
+
+<main class="wrap">
+  <section class="todaycard" id="todayCard"></section>
+
+  <section id="view-month">
+    <div class="navrow">
+      <button class="arrow" id="prev" aria-label="Previous month">&larr;</button>
+      <button class="arrow" id="next" aria-label="Next month">&rarr;</button>
+      <h2 id="mtitle"></h2>
+    </div>
+    <div class="grid" id="dow"></div>
+    <div class="grid" id="cells"></div>
+    <div class="legend" id="legend"></div>
+  </section>
+
+  <section id="view-year" class="hidden">
+    <div class="navrow">
+      <button class="arrow" id="yprev" aria-label="Previous year">&larr;</button>
+      <button class="arrow" id="ynext" aria-label="Next year">&rarr;</button>
+      <h2 id="ytitle"></h2>
+    </div>
+    <div class="yearwrap">
+      <div class="ymonths" id="ymonths"></div>
+      <div class="yrow">
+        <div class="ylabels" id="ylabels"></div>
+        <div class="ystrip" id="ystrip"></div>
+      </div>
+    </div>
+    <div class="legend" id="ylegend"></div>
+    <p class="note">Each column is one week. The diagonal banding is the 28 day rotation: two weeks
+      at RBWH, one at George Institute or Wesley, one at Caboolture. Faded cells are predicted by the
+      cycle rather than confirmed by a published roster.</p>
+  </section>
+
+  <section id="view-agenda" class="hidden">
+    <div class="navrow"><h2>Next 120 days</h2></div>
+    <div class="agenda" id="agenda"></div>
+  </section>
+</main>
+
+<script src="roster-api.js"></script>
+<script>
+/* ---------------------------------------------------------------
+   DATA SOURCE
+   The workbook is no longer baked in. RosterAPI reads the Google
+   Sheet through the Apps Script endpoint, caches the payload in
+   localStorage, and calls bootRoster() with it. Nothing inside
+   bootRoster changed when the source moved.
+----------------------------------------------------------------*/
+function bootRoster(DATA){
+
+  const SITE_COLOR = {'RBWH':'var(--rbwh)','Caboolture':'var(--cab)','Wesley':'var(--wes)'};
+  const SITE_SHORT = {'RBWH':'RBWH','Caboolture':'Caboolture','Wesley':'Wesley'};
+  const iso = d => d.toISOString().slice(0,10);
+  const parse = s => { const [y,m,d]=s.split('-').map(Number); return new Date(Date.UTC(y,m-1,d)); };
+  const addDays=(d,n)=>new Date(d.getTime()+n*86400000);
+  const DOW=['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
+  const MON=['January','February','March','April','May','June','July','August','September','October','November','December'];
+
+  const ANCHOR = parse(DATA.config.cycle_anchor_date);
+  const CYCLE  = DATA.cycle;
+  function cycleSite(d){
+    const n = Math.floor((d - ANCHOR)/86400000);
+    const k = ((n % 28)+28)%28 + 1;
+    const band = CYCLE.find(c => k>=c.cycle_day_from && k<=c.cycle_day_to);
+    return band ? band.site : null;
+  }
+
+  const byDate = (arr,key='date') => arr.reduce((m,r)=>{ (m[r[key]] ||= []).push(r); return m; },{});
+  const SHIFTS = byDate(DATA.shifts), ONCALL = byDate(DATA.oncall), OBS = byDate(DATA.observances);
+  function spans(list){ return list.map(r=>({...r,s:parse(r.start),e:parse(r.end)})); }
+  const EVENTS = spans(DATA.events), SCHOOL = spans(DATA.school);
+  const inSpan=(d,a)=>a.filter(r=>d>=r.s&&d<=r.e);
+
+  function info(d){
+    const k = iso(d);
+    const sh = (SHIFTS[k]||[])[0];
+    const site = sh ? sh.site : cycleSite(d);
+    const ev = inSpan(d,EVENTS);
+    const leave = ev.filter(e=>e.category==='leave');
+    return {
+      key:k, site, duty: sh ? sh.duty : null, modifier: sh ? sh.modifier : null,
+      confirmed: !!sh, oncall: (ONCALL[k]||[]), obs: (OBS[k]||[]),
+      events: ev.filter(e=>e.category!=='leave'), leave,
+      school: inSpan(d,SCHOOL).length>0
+    };
+  }
+
+  let mode = 'simple';            // simple = wife view, full = duty codes
+  let cur  = new Date(Date.UTC(new Date().getFullYear(), new Date().getMonth(), 1));
+  let yr   = new Date().getFullYear();
+
+  /* ---------------- today card ---------------- */
+  function renderToday(){
+    const t = new Date(); const d = new Date(Date.UTC(t.getFullYear(),t.getMonth(),t.getDate()));
+    const i = info(d);
+    const roles = i.oncall.map(o=>o.role).join(' · ');
+    const el = document.getElementById('todayCard');
+    const extras = [...i.leave.map(e=>e.title), ...i.events.map(e=>e.title), ...i.obs.map(o=>o.title)];
+    el.innerHTML = `
+      <div class="spine" style="background:${SITE_COLOR[i.site]||'var(--ink-3)'}"></div>
+      <div class="body">
+        <div>
+          <span class="lbl">Today</span>
+          <span class="big">${DOW[(d.getUTCDay()+6)%7]} ${d.getUTCDate()} ${MON[d.getUTCMonth()].slice(0,3)}</span>
+        </div>
+        <div>
+          <span class="lbl">Where</span>
+          <span class="sub">${SITE_SHORT[i.site]||'Not rostered'}${
+            i.duty && mode==='full' ? ' · '+i.duty : ''}${
+            i.confirmed?'':' <span class="pill">predicted</span>'}</span>
+        </div>
+        <div>
+          <span class="lbl">On call</span>
+          <span class="sub">${roles || 'No'}</span>
+        </div>
+        ${extras.length?`<div><span class="lbl">Also</span><span class="sub">${extras.join(' · ')}</span></div>`:''}
+      </div>`;
+  }
+
+  /* ---------------- month ---------------- */
+  function renderMonth(){
+    document.getElementById('mtitle').textContent = MON[cur.getUTCMonth()]+' '+cur.getUTCFullYear();
+    const dowEl=document.getElementById('dow'); dowEl.innerHTML='';
+    DOW.forEach(x=>{const e=document.createElement('div');e.className='dow';e.textContent=x;dowEl.appendChild(e);});
+
+    const first = new Date(Date.UTC(cur.getUTCFullYear(),cur.getUTCMonth(),1));
+    const start = addDays(first, -(((first.getUTCDay()+6)%7)));
+    const todayKey = iso(new Date(Date.UTC(new Date().getFullYear(),new Date().getMonth(),new Date().getDate())));
+    const box=document.getElementById('cells'); box.innerHTML='';
+
+    for(let n=0;n<42;n++){
+      const d=addDays(start,n), i=info(d);
+      const c=document.createElement('div');
+      c.className='cell'+(d.getUTCMonth()!==cur.getUTCMonth()?' out':'')
+        +(i.confirmed?'':' prov')+(i.school?' school':'')+(i.key===todayKey?' is-today':'');
+      const parts=[`<div class="spine" style="background:${SITE_COLOR[i.site]||'transparent'}"></div>`,
+        `<div class="dnum"><span>${d.getUTCDate()}</span></div>`];
+      if(mode==='full' && i.duty)
+        parts.push(`<div class="duty">${i.duty}${i.modifier?' · '+i.modifier:''}</div>`);
+      parts.push(`<div class="site">${SITE_SHORT[i.site]||''}</div>`);
+      if(i.oncall.length) parts.push('<div>'+i.oncall.map(o=>`<span class="oc">${o.role}</span>`).join('')+'</div>');
+      i.leave.forEach(e=>parts.push(`<div class="tag leave">${e.title}</div>`));
+      i.obs.forEach(o=>parts.push(`<div class="tag obs">${o.title}</div>`));
+      i.events.forEach(e=>parts.push(`<div class="tag ev">${e.title}</div>`));
+      c.innerHTML=parts.join('');
+      box.appendChild(c);
+    }
+    document.getElementById('legend').innerHTML = [
+      ['var(--rbwh)','RBWH'],['var(--cab)','Caboolture'],['var(--wes)','Wesley'],
+      ['#F6E9CE','Leave'],['#F5DCDE','Observance'],['#F4F6EC','School holidays']
+    ].map(([c,l])=>`<span><i style="background:${c}"></i>${l}</span>`).join('')
+     + '<span><i class="hatch"></i>Predicted by cycle, not yet published</span>';
+  }
+
+  /* ---------------- year strip ---------------- */
+  function renderYear(){
+    document.getElementById('ytitle').textContent = yr;
+    const lab=document.getElementById('ylabels'); lab.innerHTML='';
+    DOW.forEach(x=>{const e=document.createElement('div');e.textContent=x[0];lab.appendChild(e);});
+
+    const jan1=new Date(Date.UTC(yr,0,1));
+    const start=addDays(jan1,-(((jan1.getUTCDay()+6)%7)));
+    const strip=document.getElementById('ystrip'); strip.innerHTML='';
+    const months=document.getElementById('ymonths'); months.innerHTML='';
+    let seen=-1, weeks=0;
+    for(let w=0;w<53;w++){
+      for(let r=0;r<7;r++){
+        const d=addDays(start,w*7+r), i=info(d);
+        const c=document.createElement('div');
+        c.className='ycell'+(i.confirmed?'':' prov');
+        c.style.background = d.getUTCFullYear()===yr ? (SITE_COLOR[i.site]||'transparent') : 'transparent';
+        if(d.getUTCFullYear()===yr){
+          c.title=`${i.key} · ${SITE_SHORT[i.site]||''}${i.duty?' · '+i.duty:''}`;
+          if(i.leave.length) c.innerHTML+='<span class="lv"></span>';
+          if(i.obs.length)   c.innerHTML+='<span class="ob"></span>';
+          if(i.school)       c.innerHTML+='<span class="sc"></span>';
+        }
+        strip.appendChild(c);
+      }
+      const m=addDays(start,w*7+3).getUTCMonth();
+      const s=document.createElement('span');
+      s.style.width='14px'; s.style.flex='none';
+      s.textContent = (m!==seen) ? MON[m].slice(0,1) : '';
+      if(m!==seen) seen=m;
+      months.appendChild(s);
+    }
+    months.style.marginLeft='14px';
+    document.getElementById('ylegend').innerHTML=[
+      ['var(--rbwh)','RBWH'],['var(--cab)','Caboolture'],['var(--wes)','Wesley'],
+      ['var(--leave)','Leave'],['var(--obs)','Observance'],['var(--school)','School holidays']
+    ].map(([c,l])=>`<span><i style="background:${c}"></i>${l}</span>`).join('');
+  }
+
+  /* ---------------- agenda ---------------- */
+  function renderAgenda(){
+    const t=new Date(); const today=new Date(Date.UTC(t.getFullYear(),t.getMonth(),t.getDate()));
+    const rows=[];
+    EVENTS.filter(e=>e.e>=today && e.s<=addDays(today,120)).forEach(e=>rows.push({d:e.s,end:e.e,t:e.title,k:e.category}));
+    DATA.observances.forEach(o=>{const d=parse(o.date);
+      if(d>=today && d<=addDays(today,120)) rows.push({d,end:d,t:o.title,k:'observance',note:o.note,c:o.contested});});
+    SCHOOL.forEach(s=>{ if(s.e>=today && s.s<=addDays(today,120)) rows.push({d:s.s,end:s.e,t:s.label,k:'school'});});
+    rows.sort((a,b)=>a.d-b.d);
+    const fmt=d=>`${DOW[(d.getUTCDay()+6)%7]} ${d.getUTCDate()} ${MON[d.getUTCMonth()].slice(0,3)}`;
+    document.getElementById('agenda').innerHTML = rows.length ? rows.map(r=>`
+      <div class="arow">
+        <div class="when">${fmt(r.d)}${r.end>r.d?'<br>&ndash; '+fmt(r.end):''}</div>
+        <div class="what">
+          <span class="ttl">${r.t}</span>
+          <span class="meta">
+            <span class="pill">${r.k}</span>
+            ${r.c==='Y'?'<span class="pill contested">check Chennai</span>':''}
+            ${r.note?' '+r.note:''}
+          </span>
+        </div>
+      </div>`).join('')
+      : '<p class="note">Nothing in the next 120 days.</p>';
+  }
+
+  /* ---------------- wiring ---------------- */
+  function renderAll(){ renderToday(); renderMonth(); renderYear(); renderAgenda(); }
+  document.querySelectorAll('[data-view]').forEach(b=>b.onclick=()=>{
+    document.querySelectorAll('[data-view]').forEach(x=>x.setAttribute('aria-selected',x===b));
+    ['month','year','agenda'].forEach(v=>
+      document.getElementById('view-'+v).classList.toggle('hidden', v!==b.dataset.view));
+  });
+  document.getElementById('prev').onclick=()=>{cur=new Date(Date.UTC(cur.getUTCFullYear(),cur.getUTCMonth()-1,1));renderMonth();};
+  document.getElementById('next').onclick=()=>{cur=new Date(Date.UTC(cur.getUTCFullYear(),cur.getUTCMonth()+1,1));renderMonth();};
+  document.getElementById('yprev').onclick=()=>{yr--;renderYear();};
+  document.getElementById('ynext').onclick=()=>{yr++;renderYear();};
+  document.getElementById('modeBtn').onclick=function(){
+    mode = mode==='simple'?'full':'simple';
+    this.setAttribute('aria-pressed', mode==='full');
+    this.querySelector('.switch').dataset.on = mode==='full';
+    renderToday(); renderMonth();
+  };
+  renderAll();
+  if('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js').catch(()=>{});
+
+}
+
+/* ---------------- data bootstrap ---------------- */
+(function(){
+  let booted = false;
+
+  function pill(text, action){
+    let el = document.getElementById('statusPill');
+    if(!el){
+      el = document.createElement('div');
+      el.id = 'statusPill';
+      el.style.cssText = 'position:fixed;left:50%;transform:translateX(-50%);bottom:18px;'
+        + 'z-index:50;background:var(--ink);color:var(--paper);font-family:var(--sans);'
+        + 'font-size:13px;padding:9px 14px;border-radius:3px;display:flex;gap:12px;'
+        + 'align-items:center;box-shadow:0 2px 12px rgba(23,33,43,.25)';
+      document.body.appendChild(el);
+    }
+    el.innerHTML = '';
+    el.appendChild(document.createTextNode(text));
+    if(action){
+      const b = document.createElement('button');
+      b.textContent = action.label;
+      b.style.cssText = 'color:var(--paper);text-decoration:underline;font:inherit;padding:0';
+      b.onclick = action.fn;
+      el.appendChild(b);
+    }
+    return el;
+  }
+  function clearPill(){ const el=document.getElementById('statusPill'); if(el) el.remove(); }
+
+  function ago(iso){
+    if(!iso) return 'unknown age';
+    const mins = Math.round((Date.now() - new Date(iso).getTime())/60000);
+    if(mins < 60) return mins + ' min old';
+    const hrs = Math.round(mins/60);
+    if(hrs < 48) return hrs + ' h old';
+    return Math.round(hrs/24) + ' days old';
+  }
+
+  RosterAPI.load({
+    onData: function(data, info){
+      if(!booted){
+        booted = true;
+        bootRoster(data);
+        clearPill();
+        return;
+      }
+      if(info.source === 'network' && info.changed){
+        pill('Roster updated.', {label:'Reload', fn:function(){ location.reload(); }});
+      }
+    },
+    onError: function(err, info){
+      if(booted){
+        pill('Offline. Showing cached roster, ' + ago(info.meta && info.meta.fetched) + '.');
+        setTimeout(clearPill, 6000);
+      } else {
+        pill('Cannot reach the roster and nothing is cached on this device.');
+        console.warn('roster fetch failed', err);
+      }
+    }
+  });
+})();
+</script>
+</body>
+</html>
